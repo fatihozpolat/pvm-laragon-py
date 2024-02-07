@@ -217,7 +217,7 @@ class PVM:
         use_version_path = os.path.join(php_path, use_version)
 
         # şuan bulunduğun dizine php adında bir kısayol oluştur ve php klasörüne yönlendir
-        php_sym_path = os.path.join(os.getcwd(), "php")
+        php_sym_path = os.path.join(self.laragon_path, "bin", "pvm", "php")
         if os.path.exists(php_sym_path):
             os.remove(php_sym_path)
 
