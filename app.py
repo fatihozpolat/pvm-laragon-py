@@ -1,10 +1,9 @@
-import PvmManager
-
+import PVM
 import sys
 
 
 def main():
-    manager = PvmManager.PvmManager(sys.argv[1:])
+    manager = PVM.PVM(sys.argv[1:])
     manager.run()
 
 

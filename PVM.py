@@ -15,7 +15,7 @@ from tkinter import Tk
 from tkinter.filedialog import askdirectory
 
 
-class PvmManager:
+class PVM:
     def __init__(self, args):
         self.args = args
         self.command = args[0]
