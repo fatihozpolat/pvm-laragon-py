@@ -22,14 +22,20 @@ class PVM:
         self.args = args[1:]
         self.laragon_is_working = False
 
+        self.pvm_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Roaming", "PVM")
+        # pvm.ini dosyasını oku eğer yoksa oluştur
+        pvm_ini_path = os.path.join(self.pvm_path, "pvm.ini")
+        if not os.path.exists(pvm_ini_path):
+            os.makedirs(self.pvm_path, exist_ok=True)
+            with open(pvm_ini_path, "w") as file:
+                file.write("[laragon]\npath = ")
+
         self.config = configparser.ConfigParser()
-        self.config.read("pvm.ini")
+        self.config.read(pvm_ini_path)
+
         self.laragon_path = self.config["laragon"]["path"]
-        self.php_path = os.path.join(self.laragon_path, "bin", "php")
 
-        pvm_ini = os.path.join(self.laragon_path, "bin", "pvm", "pvm.ini")
-
-        if not os.path.exists(pvm_ini):
+        if not self.laragon_path:
             ctypes.windll.user32.MessageBoxW(0, "Please select Laragon path", "PvmManager", 0x40)
 
             root = Tk()
@@ -45,8 +51,12 @@ class PVM:
 
             config = configparser.ConfigParser()
             config["laragon"] = {"path": laragon_path}
-            with open(pvm_ini, "w") as file:
+            with open(pvm_ini_path, "w") as file:
                 config.write(file)
+
+            self.laragon_path = laragon_path
+
+        self.php_path = os.path.join(self.laragon_path, "bin", "php")
 
     def run(self):
         if self.command == "help":
@@ -217,7 +227,7 @@ class PVM:
         use_version_path = os.path.join(php_path, use_version)
 
         # şuan bulunduğun dizine php adında bir kısayol oluştur ve php klasörüne yönlendir
-        php_sym_path = os.path.join(self.laragon_path, "bin", "pvm", "php")
+        php_sym_path = os.path.join(self.pvm_path, "php")
         if os.path.exists(php_sym_path):
             os.remove(php_sym_path)
 
